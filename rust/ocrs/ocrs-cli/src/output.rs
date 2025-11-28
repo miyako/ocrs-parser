@@ -5,6 +5,9 @@ use serde_json::json;
 
 use ocrs::{TextItem, TextLine};
 
+use url::Url;
+use std::path::Path;
+
 pub enum OutputFormat {
     /// Output a PNG image containing a copy of the input image annotated with
     /// text bounding boxes.
@@ -38,6 +41,12 @@ fn ocr_json(args: FormatJsonArgs) -> serde_json::Value {
         text_lines,
     } = args;
 
+    let url = Url::parse(input_path).unwrap();
+    let path = url.path();
+    let ext = Path::new(path)
+    .extension()
+    .and_then(|e| e.to_str());
+
     let line_items: Vec<_> = text_lines
         .iter()
         .filter_map(|line| line.as_ref())
@@ -70,6 +79,7 @@ fn ocr_json(args: FormatJsonArgs) -> serde_json::Value {
         // "url": input_path,
         // "image_width": width,
         // "image_height": height,
+        "type": ext,
         "meta": {
             // "url": input_path,
             "width": width,
