@@ -5,7 +5,6 @@ use serde_json::json;
 
 use ocrs::{TextItem, TextLine};
 
-use url::Url;
 use std::path::Path;
 
 pub enum OutputFormat {
@@ -41,8 +40,7 @@ fn ocr_json(args: FormatJsonArgs) -> serde_json::Value {
         text_lines,
     } = args;
 
-    let url = Url::parse(input_path).unwrap();
-    let path = url.path();
+    let path = input_path;
     let ext = Path::new(path)
     .extension()
     .and_then(|e| e.to_str());

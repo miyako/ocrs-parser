@@ -398,7 +398,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         OutputFormat::Json => {
             let content = format_json_output(FormatJsonArgs {
-                input_path: args.input_path.as_deref().unwrap_or("-"),
+                input_path: args.input_path.as_deref().unwrap_or("stdIn.image"),
                 input_hw: color_img.shape()[1..].try_into()?,
                 text_lines: &line_texts,
             });
