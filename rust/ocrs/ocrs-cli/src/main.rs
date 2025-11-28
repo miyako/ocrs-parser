@@ -124,7 +124,7 @@ fn parse_args() -> Result<Args, lexopt::Error> {
     let mut beam_search = false;
     let mut debug = false;
     let mut detection_model = None;
-    let mut output_format = OutputFormat::Text;
+    let mut output_format = OutputFormat::Json;
     let mut input_path = None;
     let mut output_path = None;
     let mut recognition_model = None;
@@ -153,6 +153,9 @@ fn parse_args() -> Result<Args, lexopt::Error> {
             }
             Short('j') | Long("json") => {
                 output_format = OutputFormat::Json;
+            }
+            Short('t') | Long("text") => {
+                output_format = OutputFormat::Text;
             }
             Short('i') | Long("input") => {
                 input_path = Some(parser.value()?.string()?);

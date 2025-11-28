@@ -44,18 +44,22 @@ fn ocr_json(args: FormatJsonArgs) -> serde_json::Value {
         .map(|line| {
             let word_items: Vec<_> = line
                 .words()
+                /*
                 .map(|word| {
                     json!({
                         "text": word.to_string(),
-                        "vertices": rounded_vertex_coords(&word.rotated_rect()),
+                        // "vertices": rounded_vertex_coords(&word.rotated_rect()),
                     })
                 })
+                */
+                .map(|word| word.to_string()) // json string, not object
                 .collect();
 
             json!({
                 "text": line.to_string(),
-                "words": word_items,
-                "vertices": rounded_vertex_coords(&line.rotated_rect()),
+                //"words": word_items,
+                "values": json!(word_items),
+               // "vertices": rounded_vertex_coords(&line.rotated_rect()),
             })
         })
         .collect();
@@ -63,15 +67,23 @@ fn ocr_json(args: FormatJsonArgs) -> serde_json::Value {
     let [height, width] = input_hw;
 
     json!({
-        "url": input_path,
-        "image_width": width,
-        "image_height": height,
-
-        // nb. Since we haven't got layout analysis info here, we just put all
-        // the lines on one paragraph.
-        "paragraphs": [{
-            "lines": serde_json::Value::Array(line_items),
-        }]
+        // "url": input_path,
+        // "image_width": width,
+        // "image_height": height,
+        "meta": {
+            // "url": input_path,
+            "width": width,
+            "height": height,            
+        },
+        "pages": [
+            // nb. Since we haven't got layout analysis info here, we just put all
+            // the lines on one paragraph.
+                // {"paragraphs": [{
+                //     "lines": serde_json::Value::Array(line_items),
+                // }]
+                {"paragraphs":  serde_json::Value::Array(line_items),
+            }            
+        ]
     })
 }
 
